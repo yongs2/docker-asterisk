@@ -1,18 +1,36 @@
 #!/usr/bin/python
-# -*- coding:euc-kr -*-
+# -*- coding:utf-8 -*-
 #
 # python 2.7.5
 #
 
 from twisted.protocols.basic import LineReceiver
 from twisted.internet.protocol import ClientFactory, ServerFactory
-from twisted.internet import reactor
 from twisted.internet.error import ConnectionLost, ConnectionDone, ConnectionAborted
+import sys
+
+if 'bsd' in sys.platform:
+    from twisted.internet import kqreactor
+    kqreactor.install()
+    print (".......kqreactor")
+elif sys.platform.startswith('linux'):
+    from twisted.internet import epollreactor
+    epollreactor.install()
+    print (".......epollreactor")
+elif sys.platform.startswith('darwin'):
+    from twisted.internet import kqreactor
+    kqreactor.install()
+    print (".......kqreactor")
+elif sys.platform == 'win32':
+    raise Exception("Sorry dude, Twisted/Windows select/iocp reactors lack the necessary bits.")
+else:
+    raise Exception("Hey man, what OS are you using?")
+
+from twisted.internet import reactor
 
 import string
 import re
 import time
-import sys
 import struct
 from array import array
 from time import sleep
