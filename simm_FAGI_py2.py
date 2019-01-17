@@ -59,7 +59,7 @@ class FagiClientProtocol(LineReceiver):
             return ConnectionAborted()
 
         if self.m_nState == 0 :
-            if line.find("agi_network_script:") > 0 :
+            if line.find("\n\n") > 0 :
                 self.m_nState = 1
                 szCmd = "ANSWER\n";
         elif token[0] == "200" or token[0] == "500" :
